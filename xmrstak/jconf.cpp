@@ -52,7 +52,7 @@ using namespace rapidjson;
  */
 enum configEnum {
 	aPoolList, bTlsSecureAlgo, sCurrency, iCallTimeout, iNetRetry, iGiveUpLimit, iVerboseLevel, bPrintMotd, iAutohashTime, 
-	bFlushStdout, bDaemonMode, sOutputFile, iHttpdPort, sHttpLogin, sHttpPass, bPreferIpv4, bAesOverride, sUseSlowMem 
+	bFlushStdout, bDaemonMode, sOutputFile, iHttpdPort, sHttpLogin, sHttpPass, bPreferIpv4, bAesOverride, sUseSlowMem, bUseUac 
 };
 
 struct configVal {
@@ -81,7 +81,8 @@ configVal oConfigValues[] = {
 	{ sHttpPass, "http_pass", kStringType },
 	{ bPreferIpv4, "prefer_ipv4", kTrueType },
 	{ bAesOverride, "aes_override", kNullType },
-	{ sUseSlowMem, "use_slow_memory", kStringType }
+	{ sUseSlowMem, "use_slow_memory", kStringType },
+	{ bUseUac, "use_uac", kTrueType }
 };
 
 constexpr size_t iConfigCnt = (sizeof(oConfigValues)/sizeof(oConfigValues[0]));
@@ -208,6 +209,11 @@ bool jconf::IsCurrencyMonero()
 bool jconf::PreferIpv4()
 {
 	return prv->configValues[bPreferIpv4]->GetBool();
+}
+
+bool jconf::UseUac()
+{
+  return prv->configValues[bUseUac]->GetBool();
 }
 
 uint64_t jconf::GetCallTimeout()

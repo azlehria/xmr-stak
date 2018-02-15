@@ -23,6 +23,7 @@ struct params
 	bool useAMD;
 	bool useNVIDIA;
 	bool useCPU;
+	bool useUAC;
 
 	bool poolUseTls = false;
 	std::string poolURL;
@@ -44,6 +45,7 @@ struct params
 		useAMD(true),
 		useNVIDIA(true),
 		useCPU(true),
+		useUAC(true),
 		configFile("config.txt"),
 		configFileAMD("amd.txt"),
 		configFileCPU("cpu.txt"),

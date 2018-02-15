@@ -68,6 +68,8 @@ public:
 
 	bool PreferIpv4();
 
+	bool UseUac();
+
 	inline bool HaveHardwareAes() { return bHaveAes; }
 
 	static void cpuid(uint32_t eax, int32_t ecx, int32_t val[4]);

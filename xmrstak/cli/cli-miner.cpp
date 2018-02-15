@@ -341,7 +341,6 @@ int main(int argc, char *argv[])
 		params::inst().executablePrefix += seperator;
 	}
 
-	bool uacDialog = true;
 	bool pool_url_set = false;
 	for(size_t i = 1; i < argc-1; i++)
 	{
@@ -505,7 +504,7 @@ int main(int argc, char *argv[])
 		}
 		else if(opName.compare("--noUAC") == 0)
 		{
-			uacDialog = false;
+			params::inst().useUAC = false;
 		}
 		else
 		{
@@ -514,9 +513,19 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 	}
+	
+	// check if we need a guided start
+	if(!configEditor::file_exist(params::inst().configFile))
+		do_guided_config();
+
+	if(!jconf::inst()->parse_config(params::inst().configFile.c_str()))
+	{
+		win_exit();
+		return 1;
+	}
 
 #ifdef _WIN32
-	if(uacDialog && !IsElevated())
+	if(params::inst().useUAC && !IsElevated())
 	{
 		std::string minerArgs;
 		for(int i = 1; i < argc; i++)
@@ -528,16 +537,6 @@ int main(int argc, char *argv[])
 		SelfElevate(argv[0], minerArgs);
 	}
 #endif
-	
-	// check if we need a guided start
-	if(!configEditor::file_exist(params::inst().configFile))
-		do_guided_config();
-
-	if(!jconf::inst()->parse_config(params::inst().configFile.c_str()))
-	{
-		win_exit();
-		return 1;
-	}
 
 	if (!BackendConnector::self_test())
 	{
