@@ -52,25 +52,8 @@ private:
 		timed_event(ex_event&& ev, size_t ticks) : event(std::move(ev)), ticks_left(ticks) {}
 	};
 
-	inline void set_timestamp() { dev_timestamp = get_timestamp(); };
-
 	// In miliseconds, has to divide a second (1000ms) into an integer number
 	constexpr static size_t iTickTime = 500;
-
-	// Dev donation time period in seconds. 100 minutes by default.
-	// We will divide up this period according to the config setting
-	constexpr static size_t iDevDonatePeriod = 100 * 60;
-
-	inline bool is_dev_time()
-	{
-		//Add 2 seconds to compensate for connect
-		constexpr size_t dev_portion = double(iDevDonatePeriod) * fDevDonationLevel + 2;
-
-		if(dev_portion < 12) //No point in bothering with less than 10s
-			return false;
-
-		return (get_timestamp() - dev_timestamp) % iDevDonatePeriod >= (iDevDonatePeriod - dev_portion);
-	};
 
 	std::list<timed_event> lTimedEvents;
 	std::mutex timed_event_mutex;
